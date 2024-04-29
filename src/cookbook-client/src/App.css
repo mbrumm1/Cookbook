@@ -188,10 +188,15 @@ hr {
 }
 
 .add-instruction-inputs {
+  width: 100%;
   display: flex;
 }
 
-.add-instruction-inputs input {
+.add-instruction-inputs .input-group {
+  flex-grow: 1;
+}
+
+.add-instruction-inputs .input-group > input {
   width: 90%;
 }
 

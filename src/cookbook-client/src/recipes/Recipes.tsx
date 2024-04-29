@@ -182,9 +182,9 @@ function RecipeForm({ recipe }: FormArgs) {
         <div className="input-group">
           <input type="text"></input>
         </div>
-          <button type="button" className="btn-add-instruction">
-            <i className="fa fa-plus"></i>
-          </button>
+        <button type="button" className="btn-add-instruction">
+          <i className="fa fa-plus"></i>
+        </button>
       </div>
       <hr />
       <ul className="instruction-inputs">
@@ -225,6 +225,16 @@ function IngredientListForm({ ingredients, onAdd, onUpdate, onDelete }: Ingredie
   };
   const [newIngredient, setNewIngredient] = useState<EditIngredientViewModel>(emptyIngredient);
 
+  const [units, setUnits] = useState<string[]>([]);
+  async function fetchUnits() {
+    const response = await fetch("https://localhost:4000/units");
+    setUnits(await response.json());
+  }
+
+  useEffect(() => {
+    fetchUnits();
+  }, []);
+
   return (
     <>
       <h3>Ingredients</h3>
@@ -243,10 +253,20 @@ function IngredientListForm({ ingredients, onAdd, onUpdate, onDelete }: Ingredie
         </div>
         <div className="input-group">
           <label>Unit</label>
-          <input type="text"
+          <select
             value={newIngredient.unit}
-            onChange={(e) => setNewIngredient({ ...newIngredient, unit: e.target.value })} />
+            onChange={(e) => setNewIngredient({ ...newIngredient, unit: e.target.value })}>
+            {units.map((unit, index) => <option key={index}>{unit}</option>)}
+          </select>
         </div>
+        {newIngredient.unit === "Other" &&
+          <div className="input-group">
+            <label>Other Description</label>
+            <input type="text"
+              value={newIngredient.otherUnitDescription}
+              onChange={(e) => setNewIngredient({ ...newIngredient, otherUnitDescription: e.target.value })} />
+          </div>
+        }
         <div>
           <button type="button" className="btn-add-ingredient" onClick={() => onAdd(newIngredient)}>
             <i className="fa fa-plus"></i>
@@ -275,9 +295,11 @@ function IngredientListForm({ ingredients, onAdd, onUpdate, onDelete }: Ingredie
                   onChange={(e) => onUpdate({ ...ingredient, quantity: parseInt(e.target.value) })} />
               </td>
               <td>
-                <input type="text"
+                <select
                   value={ingredient.unit}
-                  onChange={(e) => onUpdate({ ...ingredient, unit: e.target.value })} />
+                  onChange={(e) => onUpdate({ ...ingredient, unit: e.target.value })}>
+                  {units.map((unit, index) => <option key={index}>{unit}</option>)}
+                </select>
               </td>
               <td>
                 <input type="text"

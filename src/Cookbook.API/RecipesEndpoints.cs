@@ -14,6 +14,8 @@ public static class RecipesEndpoints
         recipes.MapPost("/", CreateRecipe);
         recipes.MapPut("/{id}", UpdateRecipe);
         recipes.MapDelete("/{id}", DeleteRecipe);
+
+        app.MapGet("/units", GetUnits);
     }
 
     private static async Task<IResult> GetAllRecipes(CookbookDb db)
@@ -73,6 +75,11 @@ public static class RecipesEndpoints
         }
         return TypedResults.NotFound();
     }
+
+    private static IResult GetUnits()
+    {
+        return TypedResults.Ok(Enum.GetNames<Unit>().OrderBy(u => u));
+    }
 }
 
 public class Recipe
@@ -117,7 +124,7 @@ public class CookbookDb : DbContext
         builder.Entity<Recipe>()
             .OwnsMany(r => r.Ingredients, builder => { builder.ToJson(); });
 
-        _ = builder.Entity<Recipe>()
+        builder.Entity<Recipe>()
             .Property(r => r.Instructions)
             .HasConversion(
                 v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
