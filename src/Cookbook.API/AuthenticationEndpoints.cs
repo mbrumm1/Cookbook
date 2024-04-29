@@ -6,7 +6,7 @@ public static class AuthenticationEndpoints
 {
     public static void RegisterAuthenticationEndpoints(this WebApplication app)
     {
-        var authentication = app.MapGroup("/autentication");
+        var authentication = app.MapGroup("/authentication");
         authentication.MapPost("/", Authenticate);
     }
 

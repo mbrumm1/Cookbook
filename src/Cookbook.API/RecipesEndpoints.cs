@@ -1,4 +1,8 @@
+using System.Linq;
+using System.Security.Cryptography.Xml;
+using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 public static class RecipesEndpoints
 {
@@ -16,7 +20,7 @@ public static class RecipesEndpoints
     {
         return TypedResults.Ok(
             await db.Recipes
-                .Include(r => r.Ingredients)
+                //.Include(r => r.Ingredients)
                 .AsNoTracking()
                 .ToListAsync());
     }
@@ -81,7 +85,6 @@ public class Recipe
 
 public class Ingredient
 {
-    public int Id { get; set; }
     public string Name { get; set; } = default!;
     public int Quantity { get; set; }
     public Unit Unit { get; set; }
@@ -98,16 +101,34 @@ public enum Unit
     Gallon,
     FluidOunce,
     Ounce,
-    Pound
+    Pound,
+    Other
 }
 
 public class CookbookDb : DbContext
 {
-    public DbSet<Recipe> Recipes => Set<Recipe>();
-    public DbSet<Ingredient> Ingredients => Set<Ingredient>();
+    public DbSet<Recipe> Recipes { get; set;}
 
     public CookbookDb(DbContextOptions<CookbookDb> options)
         : base(options) { }
+
+    override protected void OnModelCreating(ModelBuilder builder) 
+    {
+        builder.Entity<Recipe>()
+            .OwnsMany(r => r.Ingredients, builder => { builder.ToJson(); });
+
+        _ = builder.Entity<Recipe>()
+            .Property(r => r.Instructions)
+            .HasConversion(
+                v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
+                v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null!)!,
+                new ValueComparer<ICollection<string>>(
+                    (c1, c2) => c1.SequenceEqual(c2),
+                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                    c => (ICollection<string>)c.ToList()
+                )
+            );
+    }
 }
 
 public record CreateRecipeRequest(string Name, List<Ingredient> Ingredients, List<string> Instructions);
