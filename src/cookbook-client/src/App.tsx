@@ -1,11 +1,14 @@
+import { Outlet } from 'react-router-dom'
 import './App.css'
 import Recipes, { Recipe } from './recipes/Recipes'
 
 function App() {
   return (
     <>
-      <Recipes />
-      <Recipe id={1} />
+      <div className="main">
+        <Recipes />
+        <Outlet />
+      </div>
     </>
   )
 }
