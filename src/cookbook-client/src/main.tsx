@@ -3,7 +3,10 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import { EditRecipe, Recipe, recipeLoader, recipesLoader } from './recipes/Recipes.tsx';
+import { Recipe, deleteRecipeAction, recipeLoader, recipesLoader } from './recipes/Recipes.tsx';
+import EditRecipe, { editRecipeAction } from './recipes/EditRecipe.tsx';
+import CreateRecipe, { createRecipeAction } from './recipes/CreateRecipe.tsx';
+import RecipeIndex from './recipes/RecipeIndex.tsx';
 
 const router = createBrowserRouter([
   {
@@ -12,14 +15,28 @@ const router = createBrowserRouter([
     loader: recipesLoader,
     children: [
       {
-        path: "/recipes/:recipeId",
+        index: true,
+        element: <RecipeIndex />
+      },
+      {
+        path: "recipes/:recipeId",
         element: <Recipe />,
         loader: recipeLoader
       },
       {
+        path: "recipes/create",
+        element: <CreateRecipe />,
+        action: createRecipeAction
+      },
+      {
         path: "recipes/:recipeId/edit",
         element: <EditRecipe />,
-        loader: recipeLoader
+        loader: recipeLoader,
+        action: editRecipeAction
+      },
+      {
+        path: "recipes/:recipeId/delete",
+        action: deleteRecipeAction
       }
     ]
   }
@@ -29,4 +46,4 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <RouterProvider router={router} />
   </React.StrictMode>,
-)
+);

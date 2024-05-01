@@ -1,13 +1,15 @@
 import { Outlet } from 'react-router-dom'
 import './App.css'
-import Recipes, { Recipe } from './recipes/Recipes'
+import Recipes from './recipes/Recipes'
 
 function App() {
   return (
     <>
       <div className="main">
         <Recipes />
-        <Outlet />
+        <div className="outlet">
+          <Outlet />
+        </div>
       </div>
     </>
   )

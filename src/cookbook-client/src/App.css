@@ -12,62 +12,29 @@ body {
 button {
   padding: 12px 25px;
   border: none;
-  background-color: #e4e4e4;
-  border-radius: 100vw;
+  background-color: #fff;
+  border-radius: 8px;
   cursor: pointer;
   min-width: 120px;
   font-weight: 700;
   transition: transform 1s ease-in-out;
-  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2); */
+  box-shadow: 0 0px 1px hsla(0, 0%, 0%, 0.2), 0 1px 2px hsla(0, 0%, 0%, 0.2);
   font-family: 'Poppins';
 }
 
 button:hover {
-  transform: scale(1.05);
+  background-color: black !important;
+  color: white;
 }
 
 .btn-edit {
-  background-color: #adcfed;
+  background-color: #3fa7d6;
 }
 
 .btn-delete {
-  background-color: #edadad;
+  background-color: #ee6352;
 }
-
-/* #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-} */
 
 #root {
   width: 100%;
@@ -85,17 +52,46 @@ button:hover {
   display: flex;
 }
 
+.outlet {
+  width: 100%;
+  padding: 1rem;
+}
+
 .side-nav {
-  width: 20%;
-  padding: 50px;
+  width: 25%;
+  min-height: 100vh;
+  height: 100%;
+  padding: 30px;
+  background-color: #3fa7d6;
+}
+
+.side-nav nav {
+  margin-top: 30px;
 }
 
 .side-nav ul {
   list-style: none;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  /* justify-content: space-between; */
+  gap: 5px;
+}
+
+.side-nav nav a {
+  display: block;
+  border-radius: 8px;
+  padding: 12px 0;
+  font-size: 1.1rem;
 }
 
 .side-nav a {
   text-decoration: none;
+  color: black;
+}
+
+.side-nav a.active {
+  box-shadow: 0 0px 1px hsla(0, 0%, 0%, 0.2), 0 1px 2px hsla(0, 0%, 0%, 0.2);
 }
 
 .recipe {
@@ -105,12 +101,11 @@ button:hover {
   height: 100%;
   padding: 50px;
   column-gap: 40px;
-  /* margin: 0 auto; */
 }
 
 .recipe-name {
   grid-column: 1 / span 2;
-  grid-row: 1;
+  grid-row: 2;
   width: 100%;
   text-align: center;
   font-size: 1.6rem;
@@ -122,22 +117,27 @@ button:hover {
 
 .recipe-ingredients {
   grid-column: 1;
-  grid-row: 2;
+  grid-row: 3;
 }
 
 .recipe-instructions {
   grid-column: 2;
-  grid-row: 2;
+  grid-row: 3;
   list-style: none;
   text-align: left;
 }
 
 .recipe-menu {
   grid-column: 1 / span 2;
-  grid-row: 3;
+  grid-row: 1;
   display: flex;
   justify-content: end;
-  gap: 20px;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.side-nav .active {
+  background-color: #fac05e;
 }
 
 .ingredient {
@@ -160,9 +160,7 @@ input, select {
 }
 
 .ingredient-table td {
-  /* padding-top: 2px; */
   padding-inline: 2px;
-
 }
 
 .ingredient-table input {
@@ -182,10 +180,7 @@ input, select {
 }
 
 #edit-recipe-form button {
-  background-color: transparent;
-  border: none;
   cursor: pointer;
-  box-shadow: none;
   min-width: 30px;
 }
 
@@ -199,11 +194,12 @@ input[type="number"] {
 
 .instruction-inputs > li {
   margin-top: 5px;
+  width: 100%;
+  display: flex;
 }
 
 .instruction-input {
-  width: 90%;
-  margin-right: 5px;
+  width: 100%;
 }
 
 .add-ingredient-inputs {
@@ -269,7 +265,6 @@ hr {
 
 .btn-add-instruction {
   background-color: transparent;
-  border: none;
   cursor: pointer;
 }
 
@@ -287,7 +282,7 @@ input, select {
 
 #edit-recipe-form {
   margin-top: 50px;
-  width: 60%;
+  width: 80%;
 }
 
 .tabs {
@@ -323,4 +318,60 @@ input, select {
 .edit-recipe-name > input {
   width: 40%;
   /* margin: auto; */
+}
+
+.add-ingredient-row {
+  /* border-bottom: 2px solid rgba(0, 0, 0, 0.2); */
+  box-shadow: 0px 2px 2px -2px rgba(0, 0, 0, 0.7); 
+}
+
+.add-ingredient-row td {
+  padding-bottom: 8px;
+}
+
+.add-ingredient-row + tr td {
+  padding-top: 4px;
+}
+
+.add-instruction-row {
+  box-shadow: 0px 2px 4px -4px rgba(0, 0, 0, 0.9); 
+  padding-bottom: 10px;
+}
+
+.add-instruction-row + li {
+  padding-top: 4px;
+}
+
+.btn-submit-recipe {
+  margin: 30px 0;
+  /* border: 1px solid #000 !important; */
+}
+
+.btn-icon {
+  box-shadow: none;
+}
+
+.recipe-menu-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  gap: 10px;
+}
+
+.recipe-menu-header button {
+  margin: 0 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  background-color: white;
+}
+
+.recipe-index {
+  width: 800px;
+}
+
+.recipe-index-text {
+  margin: 8rem auto;
+  text-align: center;
 }
