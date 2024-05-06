@@ -157,7 +157,7 @@ export default function RecipeForm({ recipe, method }: RecipeFormProps) {
       <div className="recipe-menu">
         <button
           type="button"
-          className="btn-submit-recipe"
+          className="btn-dark btn-submit-recipe"
           onClick={() => handleSubmit(recipeState, method)}>Submit</button>
       </div>
     </form>
@@ -217,7 +217,7 @@ function AddIngredientRow({ units, onAdd }: AddIngredientRowProps) {
           onChange={(e) => setIngredient({ ...ingredient, otherUnitDescription: e.target.value })} />}
       </td>
       <td>
-        <button type="button" onClick={() => handleAdd(ingredient)}>Add</button>
+        <button type="button" className="btn-dark" onClick={() => handleAdd(ingredient)}>Add</button>
       </td>
     </tr>
   );
@@ -269,7 +269,7 @@ function EditIngredientList({ units, ingredients, onAdd, onUpdate, onDelete }: E
                   onChange={(e) => onUpdate({ ...ingredient, otherUnitDescription: e.target.value })} />}
               </td>
               <td>
-                <button type="button" className="btn-icon" onClick={() => onDelete(ingredient.key)}>
+                <button type="button" className="btn-transparent btn-small" onClick={() => onDelete(ingredient.key)}>
                   <i className="fa-regular fa-trash-can" aria-hidden="true"></i>
                 </button>
               </td>
@@ -294,11 +294,11 @@ function AddInstruction({ onAdd }: AddInstructionProps) {
   }
 
   return (
-    <li key={instruction.key} className="add-instruction-row">
+    <li key={instruction.key} className="add-instruction-row instruction-item">
       <input className="instruction-input" type="text"
         value={instruction.text}
         onChange={(e) => setInstruction({ ...instruction, text: e.target.value })} />
-      <button type="button" className="btn-add-instruction" onClick={() => handleAdd(instruction)}>Add</button>
+      <button type="button" className="btn-add-instruction btn-dark" onClick={() => handleAdd(instruction)}>Add</button>
     </li>
   );
 }
@@ -315,11 +315,11 @@ function EditInstructionList({ instructions, onAdd, onUpdate, onDelete }: EditIn
     <ul className="instruction-inputs">
       <AddInstruction onAdd={onAdd} />
       {instructions.map((instruction) => (
-        <li key={instruction.key}>
+        <li key={instruction.key} className="instruction-item">
           <input className="instruction-input" type="text"
             value={instruction.text}
             onChange={(e) => onUpdate({ ...instruction, text: e.target.value })} />
-          <button type="button" className="btn-delete-item btn-icon" onClick={() => onDelete(instruction.key)}>
+          <button type="button" className="btn-delete-item btn-transparent btn-small" onClick={() => onDelete(instruction.key)}>
             <i className="fa-regular fa-trash-can"></i>
           </button>
         </li>

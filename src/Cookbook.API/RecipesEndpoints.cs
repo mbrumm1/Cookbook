@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Security.Cryptography.Xml;
 using System.Text.Json;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -41,6 +42,14 @@ public static class RecipesEndpoints
 
     private static async Task<IResult> CreateRecipe(CreateRecipeRequest request, CookbookDb db)
     {
+        var validator = new CreateRecipeRequestValidator();
+        var validationResult = validator.Validate(request);
+
+        if (!validationResult.IsValid) 
+        {
+            return TypedResults.ValidationProblem(validationResult.ToDictionary());
+        }
+
         var recipe = new Recipe
         {
             Name = request.Name,
@@ -138,5 +147,29 @@ public class CookbookDb : DbContext
     }
 }
 
+public class IngredientValidator : AbstractValidator<Ingredient>
+{
+    public IngredientValidator()
+    {
+        RuleFor(ingredient => ingredient.Name).NotEmpty();
+        RuleFor(ingredient => ingredient.Quantity).GreaterThan(0);
+        RuleFor(ingredient => ingredient.OtherUnitDescription)
+            .NotEmpty()
+            .When(ingredient => ingredient.Unit == Unit.Other);
+    }
+}
+
 public record CreateRecipeRequest(string Name, List<Ingredient> Ingredients, List<string> Instructions);
+
+public class CreateRecipeRequestValidator : AbstractValidator<CreateRecipeRequest>
+{
+    public CreateRecipeRequestValidator()
+    {
+        RuleFor(request => request.Name).NotEmpty();
+        RuleForEach(request => request.Ingredients).SetValidator(new IngredientValidator());
+        RuleFor(request => request.Instructions)
+            .Must(instructions => instructions.All(instruction => !string.IsNullOrEmpty(instruction)));
+    }
+}
+
 public record UpdateRecipeRequest(string Name, List<Ingredient> Ingredients, List<string> Instructions);

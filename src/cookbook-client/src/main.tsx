@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
+import App, { appLoader } from './App.tsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { Recipe, deleteRecipeAction, recipeLoader, recipesLoader } from './recipes/Recipes.tsx';
@@ -12,7 +12,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    loader: recipesLoader,
+    loader: appLoader,
     children: [
       {
         index: true,
