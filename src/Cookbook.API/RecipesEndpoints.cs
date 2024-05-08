@@ -1,5 +1,3 @@
-using System.Linq;
-using System.Security.Cryptography.Xml;
 using System.Text.Json;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +61,14 @@ public static class RecipesEndpoints
 
     private static async Task<IResult> UpdateRecipe(int id, UpdateRecipeRequest request, CookbookDb db)
     {
+        var validator = new UpdateRecipeRequestValidator();
+        var validationResult = validator.Validate(request);
+
+        if (!validationResult.IsValid) 
+        {
+            return TypedResults.ValidationProblem(validationResult.ToDictionary());
+        }
+
         if (await db.Recipes.FindAsync(id) is Recipe recipe)
         {
             recipe.Name = request.Name;
@@ -151,8 +157,8 @@ public class IngredientValidator : AbstractValidator<Ingredient>
 {
     public IngredientValidator()
     {
-        RuleFor(ingredient => ingredient.Name).NotEmpty();
-        RuleFor(ingredient => ingredient.Quantity).GreaterThan(0);
+        RuleFor(ingredient => ingredient.Name).NotEmpty().MaximumLength(250);
+        RuleFor(ingredient => ingredient.Quantity).GreaterThan(0).LessThanOrEqualTo(99);
         RuleFor(ingredient => ingredient.OtherUnitDescription)
             .NotEmpty()
             .When(ingredient => ingredient.Unit == Unit.Other);
@@ -165,11 +171,32 @@ public class CreateRecipeRequestValidator : AbstractValidator<CreateRecipeReques
 {
     public CreateRecipeRequestValidator()
     {
-        RuleFor(request => request.Name).NotEmpty();
-        RuleForEach(request => request.Ingredients).SetValidator(new IngredientValidator());
+        RuleFor(request => request.Name)
+            .NotEmpty()
+            .MaximumLength(500);
+        RuleForEach(request => request.Ingredients)
+            .SetValidator(new IngredientValidator());
         RuleFor(request => request.Instructions)
-            .Must(instructions => instructions.All(instruction => !string.IsNullOrEmpty(instruction)));
+            .Must(instructions => instructions.All(
+                instruction => !string.IsNullOrEmpty(instruction) &&
+                instruction.Length <= 1000));
     }
 }
 
 public record UpdateRecipeRequest(string Name, List<Ingredient> Ingredients, List<string> Instructions);
+
+public class UpdateRecipeRequestValidator : AbstractValidator<UpdateRecipeRequest>
+{
+    public UpdateRecipeRequestValidator()
+    {
+        RuleFor(request => request.Name)
+            .NotEmpty()
+            .MaximumLength(500);
+        RuleForEach(request => request.Ingredients)
+            .SetValidator(new IngredientValidator());
+        RuleFor(request => request.Instructions)
+            .Must(instructions => instructions.All(
+                instruction => !string.IsNullOrEmpty(instruction) &&
+                instruction.Length <= 1000));
+    }
+}
