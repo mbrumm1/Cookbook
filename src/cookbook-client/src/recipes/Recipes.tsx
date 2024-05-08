@@ -5,15 +5,19 @@ export interface Recipe {
   id: number;
   name: string;
   ingredients: Ingredient[];
-  instructions: string[];
+  instructions: Instruction[];
 };
 
-interface Ingredient {
+export interface Ingredient {
   name: string;
   quantity: number;
   unit: string;
   otherUnitDescription?: string;
 };
+
+export interface Instruction {
+  text: string;
+}
 
 export async function recipesLoader(): Promise<Recipe[]> {
   const response = await fetch(`${config.baseUrl}/recipes`, { method: "GET" });
@@ -23,7 +27,11 @@ export async function recipesLoader(): Promise<Recipe[]> {
 
 export async function recipeLoader({ params }: any): Promise<Recipe> {
   const response = await fetch(`${config.baseUrl}/recipes/${params.recipeId}`, { method: "GET" });
-  const recipe = await response.json();
+  const recipeResponse = await response.json();
+  const recipe: Recipe = { 
+    ...recipeResponse, 
+    instructions: recipeResponse.instructions.map((instruction: string) => ({ text: instruction }))
+  };
   return recipe;
 }
 
@@ -76,7 +84,7 @@ export function Recipe() {
       <ul className="recipe-instructions">
         {recipe.instructions.map((instruction, index) => (
           <li key={index}>
-            {instruction}
+            {instruction.text}
           </li>
         ))}
       </ul>

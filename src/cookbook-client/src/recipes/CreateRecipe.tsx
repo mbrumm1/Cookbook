@@ -1,6 +1,6 @@
 import { ActionFunctionArgs, redirect } from "react-router-dom";
 import config from "../config";
-import RecipeForm from "./RecipeForm";
+import { RecipeHookForm } from "./RecipeForm";
 import { Recipe } from "./Recipes";
 
 export async function createRecipeAction({ request }: ActionFunctionArgs): Promise<Response> {
@@ -25,6 +25,6 @@ export default function CreateRecipe() {
     }
 
     return (
-        <RecipeForm recipe={recipe} method="post" />
+        <RecipeHookForm recipe={recipe} />
     );
 }

@@ -9,10 +9,25 @@ body {
   font-size: 14px;
 }
 
-.input-group label, 
+.input-group {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.input-group input {
+  min-width: 100%;
+}
+
+.input-group .error-message {
+  align-self: flex-end;
+}
+
+/* .input-group label, 
 .input-group input {
   display: block;
-}
+} */
 
 hr {
   margin: 10px 0;
@@ -53,11 +68,43 @@ input, select {
 
 /* reorganizing css... */
 
+/* utilities */
+
+
+.w-25 { width: 25%; }
+.w-50 { width: 50%; }
+.w-75 { width: 75%; }
+.w-100 { width: 100%; }
+
+
+
+/* error page */
+
+.error-page {
+  width: 20rem;
+  margin: 10rem auto;
+  text-align: center;
+}
+
+/* validation errors */
+
+.error-message {
+  color: red;
+  margin-top: 4px;
+}
+
+.error-icon {
+  color: red;
+  position: absolute;
+  padding: 0.75rem;
+  right: 0%;
+}
+
 /* layout */
 
 .main-layout {
   display: grid;
-  grid-template-columns: 20rem 1fr;
+  grid-template-columns: 18rem 1fr;
 }
 
 .sidebar {
@@ -110,8 +157,13 @@ button {
   min-width: 120px;
   font-weight: 700;
   transition: transform 1s ease-in-out;
-  box-shadow: 0 0px 1px hsla(0, 0%, 0%, 0.2), 0 1px 2px hsla(0, 0%, 0%, 0.2);
+  box-shadow: 0px 0px 1px hsla(0, 0%, 0%, 0.2), 0px 1px 2px hsla(0, 0%, 0%, 0.2);
   font-family: inherit;
+  transition: scale 0.5s ease-in-out;
+}
+
+button:hover {
+  scale: 1.02;
 }
 
 .btn-dark {
@@ -225,10 +277,6 @@ button {
   transform: scale(0.90);
 }
 
-.edit-recipe-name {
-  text-align: center;
-}
-
 .edit-recipe-name > input {
   width: 40%;
 }
@@ -256,7 +304,7 @@ button {
 
 .instruction-item {
   display: flex;
-  gap: 2px;
+  gap: 4px;
 }
 
 #edit-recipe-form .recipe-menu {
@@ -331,17 +379,4 @@ input[type="number"] {
 
 .unit-input {
   width: 100px
-}
-
-.add-instruction-inputs {
-  width: 100%;
-  display: flex;
-}
-
-.add-instruction-inputs .input-group {
-  flex-grow: 1;
-}
-
-.add-instruction-inputs .input-group > input {
-  width: 90%;
 }

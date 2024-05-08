@@ -1,5 +1,5 @@
 import { ActionFunctionArgs, redirect, useLoaderData } from "react-router-dom"
-import RecipeForm from "./RecipeForm";
+import { RecipeHookForm } from "./RecipeForm";
 import { Recipe } from "./Recipes";
 import config from "../config";
 
@@ -20,6 +20,6 @@ export default function EditRecipe() {
   const recipe = useLoaderData() as Recipe;
 
   return (
-    <RecipeForm recipe={recipe} method="put" />
+    <RecipeHookForm recipe={recipe} />
   );
 }

@@ -7,11 +7,13 @@ import { Recipe, deleteRecipeAction, recipeLoader, recipesLoader } from './recip
 import EditRecipe, { editRecipeAction } from './recipes/EditRecipe.tsx';
 import CreateRecipe, { createRecipeAction } from './recipes/CreateRecipe.tsx';
 import RecipeIndex from './recipes/RecipeIndex.tsx';
+import ErrorPage from './ErrorPage.tsx';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />,
     loader: appLoader,
     children: [
       {
